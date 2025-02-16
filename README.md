@@ -1,5 +1,11 @@
 # Firebase Firestore Emulator Index
 
+Installation:
+
+```
+npm i -g firebase-firestore-emulator-index
+```
+
 How to use:
 
 ```
