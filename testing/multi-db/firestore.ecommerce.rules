@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+   match /{document=**} {
+     function testFunc() { 
+        // let requestResourceData = request.resource.data;
+        // return requestResourceData["XX000"] == "XX000";
+        return true;
+      }
+     allow write: if testFunc(); 
+     allow read: if true;
+     // ...
+   } 
+ }
+}
