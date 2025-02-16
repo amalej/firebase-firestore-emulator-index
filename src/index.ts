@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { emitKeypressEvents } from "readline";
 import { getIndexesFromEmulator } from "./emulatorIndex";
 import {
@@ -51,6 +53,10 @@ async function main() {
         const configsThatHaveUpdates = firestoreConfigs.filter(
           (config) => config.newIndexes.length !== 0
         );
+        if (configsThatHaveUpdates.length === 0) {
+          console.log(info(`No updates to any database indexes.`));
+          return;
+        }
         console.log(
           info(
             `Updating indexes for ${bold(
@@ -58,10 +64,6 @@ async function main() {
             )}`
           )
         );
-        if (configsThatHaveUpdates.length === 0) {
-          console.log(info(`No updates to any database indexes.`));
-          return;
-        }
         const updatePromises = configsThatHaveUpdates.map((config, i) => {
           return new Promise(async (resolve, _) => {
             firestoreConfigs[i].indexes = await updateIndexFile(
@@ -151,7 +153,7 @@ async function main() {
       hasAnyNewIndexChanged = false;
     }
 
-    await sleep(5000);
+    await sleep(1000);
   }
 }
 

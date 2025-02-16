@@ -1,4 +1,23 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "food",
+      "fields": [
+        {
+          "fieldPath": "ingridients",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "testing",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "difficulty",
+          "order": "DESCENDING"
+        }
+      ],
+      "queryScope": "COLLECTION"
+    }
+  ],
   "fieldOverrides": []
 }

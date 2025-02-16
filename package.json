@@ -1,6 +1,6 @@
 {
   "name": "firebase-firestore-emulator-index",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A CLI that lists the indexes you used in the Firestore Emulator",
   "main": "dist/index.js",
   "scripts": {
