@@ -28,12 +28,21 @@ const projectDirectory = params["path"] ?? "/";
 const projectId = params["project"];
 const host = params["host"] ?? "127.0.0.1";
 const portAddress = params["port"] ? parseInt(params["port"]) : 8080;
+const isNonInteractive = params["non-interactive"] ?? false;
 
 if (!projectId) {
   throw Error("Missing parameter 'project'");
 }
 
 async function main() {
+  if (isNonInteractive) {
+    nonInteractive();
+  } else {
+    interactive();
+  }
+}
+
+async function interactive() {
   const firestoreConfigs = await getFirestoreConfig(projectDirectory);
   console.log(
     info(`Commands: Press 'w' to update, 'r' to reset, 'q' to quit/exit`)
@@ -155,6 +164,79 @@ async function main() {
 
     await sleep(1000);
   }
+}
+
+async function nonInteractive() {
+  const firestoreConfigs = await getFirestoreConfig(projectDirectory);
+
+  for (let i = 0; i < firestoreConfigs.length; i++) {
+    const config = firestoreConfigs[i];
+    const indexesFromEmulator = await getIndexesFromEmulator(
+      projectId,
+      host,
+      portAddress,
+      config.database
+    );
+    const newIndexes: IndexesConfig[] = [];
+    for (let indexFromEmulator of indexesFromEmulator) {
+      let alreadyExists = false;
+      for (let existingIndex of config.indexes) {
+        if (deepEqual(existingIndex, indexFromEmulator)) {
+          alreadyExists = true;
+          break;
+        }
+      }
+
+      if (!alreadyExists) {
+        newIndexes.push(indexFromEmulator);
+      }
+    }
+
+    if (newIndexes.length > 0 && !deepEqual(newIndexes, config.newIndexes)) {
+      firestoreConfigs[i].newIndexes = newIndexes;
+    }
+  }
+
+  const dbWithNewIndexes = firestoreConfigs.filter(
+    (config) => config.newIndexes.length !== 0
+  );
+  if (dbWithNewIndexes.length > 0) {
+    console.log(
+      info(
+        `New indexes for ${bold(
+          dbWithNewIndexes.map((c) => c.database).join(", ")
+        )}.`
+      )
+    );
+  }
+
+  const configsThatHaveUpdates = firestoreConfigs.filter(
+    (config) => config.newIndexes.length !== 0
+  );
+  if (configsThatHaveUpdates.length === 0) {
+    console.log(info(`No updates to any database indexes.`));
+    return;
+  }
+  console.log(
+    info(
+      `Updating indexes for ${bold(
+        configsThatHaveUpdates.map((c) => c.database).join(", ")
+      )}`
+    )
+  );
+  const updatePromises = configsThatHaveUpdates.map((config, i) => {
+    return new Promise(async (resolve, _) => {
+      firestoreConfigs[i].indexes = await updateIndexFile(
+        config.indexesFilePath,
+        config.newIndexes
+      );
+      firestoreConfigs[i].newIndexes = [];
+      resolve(firestoreConfigs[i].indexes);
+    });
+  });
+
+  await Promise.all(updatePromises);
+  console.log(success(`Done updating indexes`));
 }
 
 main();

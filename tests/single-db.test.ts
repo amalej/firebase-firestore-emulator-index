@@ -3,6 +3,8 @@ import { getFirestore } from "firebase-admin/firestore";
 import { getIndexesFromEmulator } from "../src/emulator-index";
 import { deepEqual } from "../src/utils";
 
+process.env.FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080";
+
 const firebaseApp = initializeApp({
   projectId: "demo-project",
 });

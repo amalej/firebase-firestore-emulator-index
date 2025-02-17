@@ -4,7 +4,6 @@
   "description": "A CLI that lists the indexes you used in the Firestore Emulator",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
     "build:watch": "tsc --watch",
     "test": "jest --coverage --verbose -- utils.test.ts file-index.test.ts",
     "test:single-db": "cd tests/single-db && firebase emulators:exec --project demo-project \"jest --coverage --detectOpenHandles -- single-db.test.ts \"",
