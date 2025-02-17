@@ -2,21 +2,21 @@
   "indexes": [
     {
       "collectionGroup": "food",
+      "queryScope": "COLLECTION",
       "fields": [
         {
           "fieldPath": "ingridients",
           "arrayConfig": "CONTAINS"
         },
         {
-          "fieldPath": "testing",
+          "fieldPath": "name",
           "order": "ASCENDING"
         },
         {
           "fieldPath": "difficulty",
-          "order": "DESCENDING"
+          "order": "ASCENDING"
         }
-      ],
-      "queryScope": "COLLECTION"
+      ]
     }
   ],
   "fieldOverrides": []

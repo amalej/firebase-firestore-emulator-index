@@ -4,7 +4,7 @@ export async function getIndexesFromEmulator(
   projectId: string,
   host: string = "127.0.0.1",
   port: number = 8080,
-  databaseName: string
+  databaseName: string = "(default)"
 ) {
   const res = await fetch(
     `http://${host}:${port}/emulator/v1/projects/${projectId}:indexUsage?database=projects/${projectId}/databases/${databaseName}`
@@ -25,8 +25,8 @@ export async function getIndexesFromEmulator(
     const collectionGroup = matches[1];
     indexes.push({
       collectionGroup,
-      fields: index.fields.filter((fields) => fields.fieldPath !== "__name__"),
       queryScope: index.queryScope,
+      fields: index.fields.filter((fields) => fields.fieldPath !== "__name__"),
     });
   }
 
