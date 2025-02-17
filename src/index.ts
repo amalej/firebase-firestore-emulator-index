@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 import { emitKeypressEvents } from "readline";
-import { getIndexesFromEmulator } from "./emulatorIndex";
+import { getIndexesFromEmulator } from "./emulator-index";
 import {
   getFirestoreConfig,
   resetIndexFile,
   updateIndexFile,
-} from "./fileIndex";
+} from "./file-index";
 import { IndexesConfig } from "./types";
 import {
   bold,
@@ -17,7 +17,7 @@ import {
   sleep,
   success,
 } from "./utils";
-import QueueFunction from "./queueFunction";
+import QueueFunction from "./queue-function";
 
 emitKeypressEvents(process.stdin);
 if (process.stdin.isTTY) process.stdin.setRawMode(true);

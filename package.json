@@ -1,11 +1,14 @@
 {
   "name": "firebase-firestore-emulator-index",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A CLI that lists the indexes you used in the Firestore Emulator",
   "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "build:watch": "tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage --verbose -- utils.test.ts file-index.test.ts",
+    "test:single-db": "cd tests/single-db && firebase emulators:exec --project demo-project \"jest --coverage --detectOpenHandles -- single-db.test.ts \"",
+    "test:utils": "jest --coverage --verbose -- utils.test.ts"
   },
   "bin": {
     "findex": "./dist/index.js"
@@ -23,7 +26,10 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.13.1",
+    "firebase-admin": "^13.1.0",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.7.3"
   }
 }

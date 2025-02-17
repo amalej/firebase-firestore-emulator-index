@@ -14,7 +14,7 @@
         },
         {
           "fieldPath": "difficulty",
-          "order": "DESCENDING"
+          "order": "ASCENDING"
         }
       ]
     }
